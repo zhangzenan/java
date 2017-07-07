@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--namespace命名空间，作用就是对sql进行分类化管理，理解sql隔离
+    注意：使用mapper代理方法开发，namespace有特殊重要的作用-->
 <mapper namespace="test">
+
+	<!--在映射文件中配置很多sql语句-->
+	<!--需求：通过id查询用户表记录-->
+	<!--通过select执行数据查询-->
+	<!--id:标识映射文件的sql,将sql语句封装到mappedStatement对象中，所以讲id成为statement的id-->
     <select id="findUserById" parameterType="int" resultType="cn.itcast.mybatis.po.User">
         select * from user where id=#{id}
     </select>    
