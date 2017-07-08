@@ -11,6 +11,7 @@ public class User {
 	private String sex;
 	private Date birthday;
 	private String address;
+	
 	public int getId() {
 		return id;
 	}
