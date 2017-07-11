@@ -5,13 +5,55 @@
     注意：使用mapper代理方法开发，namespace有特殊重要的作用-->
 <mapper namespace="cn.itcast.mybatis.mapper.UserMapper">
 
+	<!-- 定义resultMap
+	将select id id_,username username_ from user 和User类中的属性做一个映射关系
+	type:resultMap最终映射的java对象类型，可以使用别名
+	id:对resultMap的唯一标识
+	 -->
+	<resultMap type="user" id="userResultMap">
+		<!-- id表示查询结果集中唯一标识
+		column:查询出来的别名
+		property:type指定 的pojo类型中的属性名
+		最终resultMap对column和property做一个映射关系（对应关系）-->
+		<id column="id_" property="id"/>
+		
+		<!-- result:对普通名映射定义
+		column:查询出来的列名
+		property: type指定 的pojo类型中的属性名
+		最终resultMap对column和property做一个映射关系（对应关系）-->
+		<result column="username_" property="username"/>
+	</resultMap>
+
+	<!-- 用户信息综合查询 
+	#{userCustom.sex}:取出pojo包装对象中的性别值
+	${userCustom.username}：取出pojo包装对象中的用户名称
+	-->
+	<select id="findUserList" parameterType="cn.itcast.mybatis.po.UserQueryVo" resultType="cn.itcast.mybatis.po.UserCustom">
+		select * from user where user.sex=#{userCustom.sex} and user.username like '%${userCustom.username}%'
+	</select>
+	
+	<!-- 用户信息综合查询总数
+	parameterType:指定输入类型和findUserList一样
+	resultType:输出结果类型
+	 -->
+	<select id="findUserCount" parameterType="cn.itcast.mybatis.po.UserQueryVo" resultType="int">
+		select count(*) from user where user.sex=#{userCustom.sex} and user.username like '%${userCustom.username}%'
+	</select>
+
 	<!--在映射文件中配置很多sql语句-->
 	<!--需求：通过id查询用户表记录-->
 	<!--通过select执行数据查询-->
 	<!--id:标识映射文件的sql,将sql语句封装到mappedStatement对象中，所以讲id成为statement的id-->
     <select id="findUserById" parameterType="int" resultType="user">
         select * from user where id=#{value}
-    </select>    
+    </select>   
+    
+    <!-- 使用resultMap进行输出映射 
+    resultMap:指定定义的resultMap的id,如果这个resultMap在其他的mapper文件，前边要加namespace-->
+     <select id="findUserByIdResultMap" parameterType="int" resultMap="userResultMap">
+        select id id_,username username_ from user where id=#{value}
+    </select> 
+     
     <!-- 根据用户名称查询数据，可能返回多条
     resultType:指定就是单条记录所映射的java对象类型 
     ${}表示拼接sql串，将接收到的内容不加任何修饰拼接在sql中。
