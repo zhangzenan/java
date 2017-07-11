@@ -1,6 +1,7 @@
 package cn.itcast.mybatis.mapper;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.io.Resources;
@@ -72,10 +73,15 @@ public class UserMapperTest {
 		//创建包装对象，设置查询条件
 		UserQueryVo userQueryVo=new UserQueryVo();
 		UserCustom userCustom=new UserCustom();
-		userCustom.setSex("1");
-		userCustom.setUsername("王小军");
-		userCustom.setAddress("河南郑州");
+		//由于这里使用动态sql,如果不设置某个值，条件不会拼接在sql中
+		//userCustom.setSex("1");
+		userCustom.setUsername("王小军");		
 		userQueryVo.setUserCustom(userCustom);
+		
+		List<Integer> ids=new ArrayList<Integer>();
+		ids.add(1);
+		ids.add(2);
+		userQueryVo.setIds(ids);
 		
 		// 调用userMapper的方法
 		List<UserCustom> list = userMapper.findUserList(userQueryVo);
@@ -99,6 +105,8 @@ public class UserMapperTest {
 		userCustom.setUsername("王小军");
 		userCustom.setAddress("河南郑州");
 		userQueryVo.setUserCustom(userCustom);
+		
+		
 		
 		// 调用userMapper的方法
 		int count = userMapper.findUserCount(userQueryVo);
