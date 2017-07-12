@@ -3,53 +3,72 @@
 
 <mapper namespace="cn.itcast.mybatis.mapper.OrdersMapperCustom">
 
-	<!-- 订单查询关联用户的resultMap
-	将整个查询单的结果映射到 cn.itcast.mybatis.po.Orders中
-	-->
+	<!-- 订单查询关联用户的resultMap 将整个查询单的结果映射到 cn.itcast.mybatis.po.Orders中 -->
 	<resultMap type="cn.itcast.mybatis.po.Orders" id="OrdersUserResultMap">
 		<!-- 配置映射的订单信息 -->
-		<!-- id:指定查询列中的唯一标识，订单信息中的唯一标识，如果有对个列组成的唯一标识，配置多个id
-		column:订单信息的唯一标识列
-		property:订单信息的唯一标识 列所映射到Orders中那个属性 -->
+		<!-- id:指定查询列中的唯一标识，订单信息中的唯一标识，如果有对个列组成的唯一标识，配置多个id column:订单信息的唯一标识列 property:订单信息的唯一标识 
+			列所映射到Orders中那个属性 -->
 		<id column="id" property="id"></id>
-		<result column="user_id" property="userId"/>
-		<result column="number" property="number"/>
-		<result column="createtime" property="createtime"/>
-		<result column="note" property="note"/>
-		
+		<result column="user_id" property="userId" />
+		<result column="number" property="number" />
+		<result column="createtime" property="createtime" />
+		<result column="note" property="note" />
+
 		<!-- 配置映射的关联的用户信息 -->
-		<!-- association:用于映射关联查询单个对象的信息
-		 property：要将关联查询到的的用户信息映射到Orders中哪个属性
-		 -->
+		<!-- association:用于映射关联查询单个对象的信息 property：要将关联查询到的的用户信息映射到Orders中哪个属性 -->
 		<association property="user" javaType="cn.itcast.mybatis.po.User">
-			<!-- id:关联查询用户的唯一标识
-			column:指定唯一标识用户信息的列
-			property:映射到user的哪个属性
-			 -->
-			<id column="user_id" property="id"/>
-			<result column="username" property="username"/>
-			<result column="sex" property="sex"/>
-			<result column="address" property="address"/>
+			<!-- id:关联查询用户的唯一标识 column:指定唯一标识用户信息的列 property:映射到user的哪个属性 -->
+			<id column="user_id" property="id" />
+			<result column="username" property="username" />
+			<result column="sex" property="sex" />
+			<result column="address" property="address" />
 		</association>
 	</resultMap>
+	
+	<!-- 订单及订单明细的resultMap -->
+	<resultMap type="cn.itcast.mybatis.po.Orders" id="OrdersAndOrderdetailResultMap">
+		<!-- 订单信息 -->
+		
+		<!-- 用户信息 -->
+		
+		<!-- 订单明细信息 -->
+	</resultMap>
+	
 	<select id="findOrdersUser" resultType="cn.itcast.mybatis.po.OrdersCustom">
 		select orders.* ,
-		user.id user_id,
+		user.id
+		user_id,
 		user.username,
 		user.sex,
 		user.address
 		from orders
-		join user on orders.userId=user.id
+		join user on
+		orders.userId=user.id
 	</select>
-	
+
 	<!-- 查询订单关联查询用户信息，使用resultmap -->
-	<select id="findOrdersUserResultMap" resultMap="OrdersUserResultMap"> 
+	<select id="findOrdersUserResultMap" resultMap="OrdersUserResultMap">
 		select orders.* ,
 		user.id user_id,
 		user.username,
 		user.sex,
 		user.address
+		from
+		orders
+		join user on orders.userId=user.id
+	</select>
+
+	<!-- 查询订单关联查询用户及订单明细，使用resultmap -->
+	<select id="findOrdersAndOrderdetailResultMap" resultMap="OrdersAndOrderdetailResultMap">
+		select orders.* ,
+		user.username,
+		user.sex,
+		user.address,
+		orderdetail.itemsId,
+		orderdetail.itemsNum,
+		orderdetail.ordersId
 		from orders
 		join user on orders.userId=user.id
+		join orderdetail on orderdetail.ordersId=orders.id
 	</select>
 </mapper>
