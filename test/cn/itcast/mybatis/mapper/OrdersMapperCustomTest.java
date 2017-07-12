@@ -10,6 +10,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
+import cn.itcast.mybatis.po.Orders;
 import cn.itcast.mybatis.po.OrdersCustom;
 
 public class OrdersMapperCustomTest {
@@ -38,6 +39,19 @@ public class OrdersMapperCustomTest {
 		// 创建UserMapper对象，mybatis自动生成mapper代理对象
 		OrdersMapperCustom ordersMapperCustom = sqlSession.getMapper(OrdersMapperCustom.class);
 		List<OrdersCustom> list= ordersMapperCustom.findOrdersUser();
+		System.out.println(list);
+		
+		sqlSession.close();
+		
+	}
+	
+	@Test
+	public void testfindOrdersUserResultMap() throws Exception {
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+
+		// 创建UserMapper对象，mybatis自动生成mapper代理对象
+		OrdersMapperCustom ordersMapperCustom = sqlSession.getMapper(OrdersMapperCustom.class);
+		List<Orders> list= ordersMapperCustom.findOrdersUserResultMap();
 		System.out.println(list);
 		
 		sqlSession.close();
