@@ -6,6 +6,15 @@ public class Orderdetail {
 	private Integer itemsId;
 	private Integer itemsNum;
 	
+	//明细对应的商品信息
+	private Items items;
+	
+	public Items getItems() {
+		return items;
+	}
+	public void setItems(Items items) {
+		this.items = items;
+	}
 	public Integer getId() {
 		return id;
 	}

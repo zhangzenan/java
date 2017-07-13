@@ -1,6 +1,7 @@
 package cn.itcast.mybatis.po;
 
 import java.util.Date;
+import java.util.List;
 
 /*
  * 用户po
@@ -12,6 +13,15 @@ public class User {
 	private Date birthday;
 	private String address;
 	
+	//用户创建的订单列表
+	private List<Orders> ordersList;
+	
+	public List<Orders> getOrdersList() {
+		return ordersList;
+	}
+	public void setOrdersList(List<Orders> ordersList) {
+		this.ordersList = ordersList;
+	}
 	public int getId() {
 		return id;
 	}

@@ -24,16 +24,58 @@
 			<result column="address" property="address" />
 		</association>
 	</resultMap>
-	
-	<!-- 订单及订单明细的resultMap -->
-	<resultMap type="cn.itcast.mybatis.po.Orders" id="OrdersAndOrderdetailResultMap">
+
+	<!-- 订单及订单明细的resultMap 使用extends继承，不用再配置订单信息和用户信息映射 -->
+	<resultMap type="cn.itcast.mybatis.po.Orders" id="OrdersAndOrderdetailResultMap"
+		extends="OrdersUserResultMap">
 		<!-- 订单信息 -->
-		
 		<!-- 用户信息 -->
-		
-		<!-- 订单明细信息 -->
+		<!-- 使用extends继承，不用再配置订单信息和用户信息映射 -->
+
+		<!-- 订单明细信息 一个订单关联出了多条明细，要是用collection进行映射 collection:对关联查询到多条记录映射到集合对象中 
+			property:将关联查询到多条记录映射到cn.itcast.mybatis.po.Orders哪个属性 ofType:指定映射到list集合属性中pojo的类型 -->
+		<collection property="orderdetails" ofType="cn.itcast.mybatis.po.Orderdetail">
+			<!-- id:订单明细唯一标识 property:要将订单明细的唯一标识映射到 cn.itcast.mybatis.po.Orderdetail的哪个属性 -->
+			<id column="orderdetail_id" property="id" />
+			<result column="itemsId" property="itemsId" />
+			<result column="itemsNum" property="itemsNum" />
+			<result column="ordersId" property="ordersId" />
+		</collection>
 	</resultMap>
-	
+
+	<!-- 查询用户及购买的商品 -->
+	<resultMap type="cn.itcast.mybatis.po.User" id="UserAndItemsResultMap">
+		<id column="userId" property="id" />
+		<result column="username" property="username" />
+		<result column="sex" property="sex" />
+		<result column="address" property="address" />
+
+		<!-- 订单信息 一个用户对应多个订单，使用collection映射 -->
+		<collection property="ordersList" ofType="cn.itcast.mybatis.po.Orders">
+			<id column="id" property="id" />
+			<result column="userId" property="userId" />
+			<result column="number" property="number" />
+			<result column="createtime" property="createtime" />
+			<result column="note" property="note" />
+
+			<!-- 订单明细 一个订单包括多个明细 -->
+			<collection property="orderdetails" ofType="cn.itcast.mybatis.po.Orderdetail">
+				<id column="orderdetail_id" property="id" />
+				<result column="itemsId" property="itemsId" />
+				<result column="itemsNum" property="itemsNum" />
+				<result column="ordersId" property="ordersId" />
+				
+				<!-- 商品信息	一个订单明细对应一个商品信息 -->
+				<association property="items" javaType="cn.itcast.mybatis.po.Items">
+					<id column="itemsId" property="id"/>
+					<result column="items_name" property="name"/>
+					<result column="detail" property="detail"/>
+					<result column="price" property="price"/>
+				</association>
+			</collection>
+		</collection>
+	</resultMap>
+
 	<select id="findOrdersUser" resultType="cn.itcast.mybatis.po.OrdersCustom">
 		select orders.* ,
 		user.id
@@ -46,7 +88,7 @@
 		orders.userId=user.id
 	</select>
 
-	<!-- 查询订单关联查询用户信息，使用resultmap -->
+	<!-- 查询订单关联查询用户信息(一对一)，使用resultmap -->
 	<select id="findOrdersUserResultMap" resultMap="OrdersUserResultMap">
 		select orders.* ,
 		user.id user_id,
@@ -55,20 +97,49 @@
 		user.address
 		from
 		orders
-		join user on orders.userId=user.id
+		join user
+		on orders.userId=user.id
 	</select>
 
-	<!-- 查询订单关联查询用户及订单明细，使用resultmap -->
+	<!-- 查询订单关联查询用户及订单明细（一对多），使用resultmap -->
 	<select id="findOrdersAndOrderdetailResultMap" resultMap="OrdersAndOrderdetailResultMap">
-		select orders.* ,
+		select
+		orders.* ,
 		user.username,
 		user.sex,
 		user.address,
+		orderdetail.id
+		orderdetail_id,
 		orderdetail.itemsId,
 		orderdetail.itemsNum,
 		orderdetail.ordersId
 		from orders
 		join user on orders.userId=user.id
-		join orderdetail on orderdetail.ordersId=orders.id
+		join
+		orderdetail on orderdetail.ordersId=orders.id
+	</select>
+
+	<!-- 查询用户及购买的商品信息，使用resultMap -->
+	<select id="findUserAndItemsResultMap" resultMap="UserAndItemsResultMap">
+		select orders.*
+		,
+		user.id userId,
+		user.username,
+		user.sex,
+		user.address,
+		orderdetail.id
+		orderdetail_id,
+		orderdetail.itemsId,
+		orderdetail.itemsNum,
+		orderdetail.ordersId,
+		items.name items_name,
+		items.detail,
+		items.price
+		from orders
+		join user on orders.userId=user.id
+		join orderdetail on
+		orderdetail.ordersId=orders.id
+		join items on
+		orderdetail.itemsId=items.id
 	</select>
 </mapper>

@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import cn.itcast.mybatis.po.Orders;
 import cn.itcast.mybatis.po.OrdersCustom;
+import cn.itcast.mybatis.po.User;
 
 public class OrdersMapperCustomTest {
 	
@@ -56,6 +57,30 @@ public class OrdersMapperCustomTest {
 		
 		sqlSession.close();
 		
+	}
+	
+	@Test
+	public void testfindOrdersAndOrderdetailResultMap() throws Exception {
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+
+		// 创建UserMapper对象，mybatis自动生成mapper代理对象
+		OrdersMapperCustom ordersMapperCustom = sqlSession.getMapper(OrdersMapperCustom.class);
+		List<Orders> list= ordersMapperCustom.findOrdersAndOrderdetailResultMap();
+		System.out.println(list);
+		
+		sqlSession.close();		
+	}
+	
+	@Test
+	public void testfindUserAndItemsResultMap() throws Exception {
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+
+		// 创建UserMapper对象，mybatis自动生成mapper代理对象
+		OrdersMapperCustom ordersMapperCustom = sqlSession.getMapper(OrdersMapperCustom.class);
+		List<User> list= ordersMapperCustom.findUserAndItemsResultMap();
+		System.out.println(list);
+		
+		sqlSession.close();		
 	}
 
 }
