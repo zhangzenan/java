@@ -17,5 +17,8 @@ public interface OrdersMapperCustom {
 	
 	//多对多映射
 	public List<User> findUserAndItemsResultMap() throws Exception;
+	
+	//延迟加载
+	public List<Orders> findOrderUserLazyLoading() throws Exception;
 
 }

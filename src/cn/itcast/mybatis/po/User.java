@@ -1,12 +1,13 @@
 package cn.itcast.mybatis.po;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /*
  * ”√ªßpo
  * */
-public class User {
+public class User implements Serializable {
 	private int id;
 	private String username;
 	private String sex;

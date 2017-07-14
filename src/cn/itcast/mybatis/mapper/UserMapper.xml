@@ -4,6 +4,9 @@
 <!--namespace命名空间，作用就是对sql进行分类化管理，理解sql隔离 注意：使用mapper代理方法开发，namespace有特殊重要的作用 -->
 <mapper namespace="cn.itcast.mybatis.mapper.UserMapper">
 
+	<!-- 开启本mapper的namespace下的二级缓存 -->
+	<cache/>
+	
 	<sql id="query_user_where">
 		<if test="userCustom!=null">
 			<if test="userCustom.sex!=null and userCustom.sex!=''">

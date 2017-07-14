@@ -147,7 +147,7 @@
 	<resultMap type="cn.itcast.mybatis.po.Orders" id="OrderUserLazyLoadingResultMap">
 		<!-- 对订单信息就行映射配置 -->
 		<id column="id" property="id"></id>
-		<result column="user_id" property="userId" />
+		<result column="userId" property="userId" />
 		<result column="number" property="number" />
 		<result column="createtime" property="createtime" />
 		<result column="note" property="note" />
@@ -161,7 +161,7 @@
 		</association>
 	</resultMap>
 	<!-- 查询订单关联查询用户，用户信息需要延迟加载 -->
-	<select id="findOrderUserLazyLoading" resultMap="">
+	<select id="findOrderUserLazyLoading" resultMap="OrderUserLazyLoadingResultMap">
 		select * from
 		orders
 	</select>

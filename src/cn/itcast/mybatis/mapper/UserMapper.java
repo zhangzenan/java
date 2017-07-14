@@ -25,5 +25,7 @@ public interface UserMapper {
 	public void insertUser(User user) throws Exception;
 	
 	public void deleteUser(int id) throws Exception;
+	
+	public void updateUser(User user) throws Exception;
 
 }
