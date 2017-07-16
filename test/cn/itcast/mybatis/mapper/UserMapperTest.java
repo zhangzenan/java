@@ -43,6 +43,7 @@ public class UserMapperTest {
 		// 调用userMapper的方法
 		User user = userMapper.findUserById(1);
 		sqlSession.close();
+		
 		System.out.println(user);
 	}
 	
