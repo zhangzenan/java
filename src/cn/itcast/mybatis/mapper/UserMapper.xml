@@ -79,6 +79,7 @@
 	<!--需求：通过id查询用户表记录 -->
 	<!--通过select执行数据查询 -->
 	<!--id:标识映射文件的sql,将sql语句封装到mappedStatement对象中，所以讲id成为statement的id -->
+	<!-- 禁用缓存useCache="false" -->
 	<select id="findUserById" parameterType="int" resultType="user">
 		select * from user where id=#{value}
 	</select>

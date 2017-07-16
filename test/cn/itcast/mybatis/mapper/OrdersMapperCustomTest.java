@@ -120,10 +120,36 @@ public class OrdersMapperCustomTest {
 		
 		//第二次发起请求，查询id为1的用户
 		User user2=userMapper.findUserById(1);
-		System.out.println(user2);
+		System.out.println(user2);		
+	}
+	
+	@Test
+	public void testCache2() throws Exception{
+		SqlSession sqlSession1 = sqlSessionFactory.openSession();
+		SqlSession sqlSession2 = sqlSessionFactory.openSession();
+		SqlSession sqlSession3 = sqlSessionFactory.openSession();
 		
+		UserMapper userMapper1 = sqlSession1.getMapper(UserMapper.class);		
+		//第一次发起请求，查询id为1的用户
+		User user1=userMapper1.findUserById(1);
+		System.out.println(user1);
+		//这里执行关闭操作，将sqlSession中的数据写到二级缓存中
+		sqlSession1.close();	
 		
+		//使用sqlSession3执行commit()操作
+	/*	UserMapper userMapper3 = sqlSession3.getMapper(UserMapper.class);
+		User user=userMapper3.findUserById(1);
+		user.setUsername("张明明");
+		userMapper3.updateUser(user);
+		//执行提交，清空UserMapper下面的二级缓存
+		sqlSession3.commit();
+		sqlSession3.close();*/		 	 	
 		
+		//第二次发起请求，查询id为1的用户
+		UserMapper userMapper2 = sqlSession2.getMapper(UserMapper.class);
+		User user2=userMapper2.findUserById(1);
+		System.out.println(user2);	
+		sqlSession2.close();
 		
 	}
 
